@@ -21,13 +21,21 @@ import numpy as np
 def load_image(filename: str | Path) -> np.ndarray:
     """Load a color image from disk using OpenCV and return it."""
     # TODO: load the image with OpenCV and return the resulting NumPy array.
-    raise NotImplementedError
+    og_img = cv2.imread("path_of_img.png")
+    return og_img
+    #raise NotImplementedError
 
 
 def convert_to_grayscale(image: np.ndarray) -> np.ndarray:
     """Convert a BGR image to grayscale float32 with values in [0, 1]."""
     # TODO: convert with OpenCV, then convert to np.float32 in the [0, 1] range.
-    raise NotImplementedError
+    img_gray = cv2.cvtColor(og_img, cv2.COLOR.BGR2GRAY)
+    img_g_float = img_gray.astype(np.float32) / 255.0
+
+    # possibly scale image
+
+    return img__g_float
+    #raise NotImplementedError
 
 
 def top_left_3x5(gray_image: np.ndarray) -> np.ndarray:
