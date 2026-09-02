@@ -21,33 +21,41 @@ import numpy as np
 def load_image(filename: str | Path) -> np.ndarray:
     """Load a color image from disk using OpenCV and return it."""
     # TODO: load the image with OpenCV and return the resulting NumPy array.
-    og_img = cv2.imread("path_of_img.png")
+    og_img = cv2.imread(str(filename))
     return og_img
-    #raise NotImplementedError
+
 
 
 def convert_to_grayscale(image: np.ndarray) -> np.ndarray:
     """Convert a BGR image to grayscale float32 with values in [0, 1]."""
     # TODO: convert with OpenCV, then convert to np.float32 in the [0, 1] range.
-    img_gray = cv2.cvtColor(og_img, cv2.COLOR.BGR2GRAY)
+    img_gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    # formats dtype and scales range
     img_g_float = img_gray.astype(np.float32) / 255.0
 
-    # possibly scale image
-
-    return img__g_float
-    #raise NotImplementedError
+    # possibly scale image?
+    return img_g_float
+   
 
 
 def top_left_3x5(gray_image: np.ndarray) -> np.ndarray:
     """Return the top-left block containing 3 rows and 5 columns."""
     # TODO
-    raise NotImplementedError
+
+    block_height = 3
+    block_width = 5
+   
+
+    top_left_bck = gray_image[0:block_height, 0:block_width]
+    return top_left_bck
+    
 
 
 def get_pixel_value(gray_image: np.ndarray, row: int, col: int) -> np.float32:
     """Return the pixel value at zero-based (row, col)."""
     # TODO
-    raise NotImplementedError
+    return gray_image[row, col]
+    # raise NotImplementedError
 
 
 def save_grayscale_image(
@@ -56,7 +64,10 @@ def save_grayscale_image(
     """Save the grayscale image using OpenCV."""
     # TODO: save a viewable grayscale image with OpenCV.
     # Hint: cv2.imwrite expects conventional image intensities for a PNG.
-    raise NotImplementedError
+    # convert back to norm range and uint8 (the standard) to save
+    gray_image = (gray_image * 255).astype(np.uint8)
+
+    cv2.imwrite(output_path, gray_image)
 
 
 def main() -> None:
