@@ -53,18 +53,46 @@ def correlate2d(image: np.ndarray, kernel: np.ndarray) -> np.ndarray:
     - Return a NumPy array with dtype np.float32.
     """
     # TODO
-    raise NotImplementedError
+    
+    # Dim img & kern
+    image_height = image.shape[0]
+    image_width = image.shape[1]
 
+    kernel_height = kernel.shape[0]
+    kernel_width = kernel.shape[1]
 
+    # Calc pad width/ height in the case height does not equal width
+    pad_width = int(kernel_width/ 2)
+    pad_height = int(kernel_height/ 2)
+
+    # pading
+    pad_dim = ((pad_height,pad_height), (pad_width,pad_width))
+    img_pad = np.pad(image, pad_dim, mode = "constant", constant_values = 0)
+
+    # empty matrix size of OG img
+    new_img = np.zeros((image_height, image_width), dtype = np.float32)
+        
+
+    for h in range(image_height):
+        for w in range(image_width):
+            window = img_pad[h: h + kernel_height, w: w + kernel_width]
+            new_img[h, w] = np.sum(window * kernel)
+
+    return new_img.astype(np.float32)
+
+    
 def convolve2d(image: np.ndarray, kernel: np.ndarray) -> np.ndarray:
     """Return same-size 2-D convolution with zero padding.
 
     Rotate the kernel by 180 degrees, then reuse correlate2d(). You may use
-    np.flip() or cv2.flip() to rotate the kernel; the filtering itself must
+    np.flip() or cv2.flip() to rotate the kernel; then filtering itself must
     still be performed by your correlate2d() implementation.
     """
-    # TODO
-    raise NotImplementedError
+   
+    new_kernel = np.flip(kernel)
+
+    return correlate2d(image, new_kernel)
+
 
 
 def median_filter3x3(image: np.ndarray) -> np.ndarray:
@@ -76,7 +104,26 @@ def median_filter3x3(image: np.ndarray) -> np.ndarray:
     filtering implementation. Return dtype np.float32.
     """
     # TODO
-    raise NotImplementedError
+    image_height = image.shape[0]
+    image_width = image.shape[1]
+    
+    kernel_height = 3
+    kernel_width = 3
+    
+    pad_width = int(kernel_height/ 2)
+    img_pad = np.pad(image, pad_width, mode = "constant", constant_values = 0)
+
+    # empty matrix size of OG img
+    median_img = np.zeros((image_height, image_width), dtype = np.float32)
+    
+    for h in range(image_height):
+        for w in range(image_width):
+            window = img_pad[h: h + kernel_height, w: w + kernel_width]
+            median_img[h, w] = np.median(window)
+    
+    return median_img.astype(np.float32)
+    
+    
 
 
 # -----------------------------------------------------------------------------
