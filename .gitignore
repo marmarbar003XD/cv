@@ -41,6 +41,7 @@ styles/
 __pycache__/
 *.py[cod]
 .ipynb_checkpoints/
+.jupyter_cache/
 
 # ============================================================
 # Conda / Python environments
@@ -78,3 +79,4 @@ find_unused_assets*.*
 temp
 code_private
 assignments_private
+_instructions_and_notes.txt
