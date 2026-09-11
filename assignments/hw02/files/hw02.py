@@ -123,18 +123,6 @@ def median_filter3x3(image: np.ndarray) -> np.ndarray:
     
     return median_img.astype(np.float32)
     
-    
-
-    # empty matrix size of OG img
-    median_img = np.zeros((image_height, image_width), dtype = np.float32)
-    
-    for h in range(image_height):
-        for w in range(image_width):
-            window = img_pad[h: h + kernel_height, w: w + kernel_width]
-            median_img[h, w] = np.median(window)
-    
-    return median_img.astype(np.float32)
-    
 
 # -----------------------------------------------------------------------------
 # The helper functions below are provided. You do not need to modify them.
