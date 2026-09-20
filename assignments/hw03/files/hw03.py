@@ -34,8 +34,24 @@ def build_laplacian_pyramid(image: np.ndarray, levels: int) -> list[np.ndarray]:
     - The final list entry is the smallest Gaussian image.
     - IMPORTANT: Your implementation must work for odd and non-square image sizes.
     """
-    # TODO
-    raise NotImplementedError
+
+    pyramid = []
+    img = image.copy()
+
+    for i in range(levels):
+
+        dsample_img = cv2.pyrDown(img,borderType=cv2.BORDER_REFLECT)
+        expand = cv2.pyrUp(dsample_img, dstsize=img.shape[::-1])
+
+        residual_lap = img - expand
+
+        pyramid.append(residual_lap)
+
+        img = dsample_img
+
+    pyramid.append(img)
+
+    return pyramid
 
 
 def reconstruct_laplacian_pyramid(pyramid: list[np.ndarray]) -> np.ndarray:
@@ -44,8 +60,16 @@ def reconstruct_laplacian_pyramid(pyramid: list[np.ndarray]) -> np.ndarray:
     Start with the final coarse image. Repeatedly expand it to the size of the
     residual at the next finer level and add that residual. Return np.float32.
     """
-    # TODO
-    raise NotImplementedError
+
+    pyramid_rev = pyramid[::-1]
+    small_g_img = pyramid_rev[0]
+
+    for level in pyramid_rev[1:]:
+        expand = cv2.pyrUp(small_g_img, dstsize=level.shape[::-1])
+        small_g_img = expand + level
+        
+    return small_g_img 
+
 
 
 def threshold_laplacian_pyramid(
