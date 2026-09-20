@@ -40,8 +40,8 @@ def build_laplacian_pyramid(image: np.ndarray, levels: int) -> list[np.ndarray]:
 
     for i in range(levels):
 
-        dsample_img = cv2.pyrDown(img,borderType=cv2.BORDER_REFLECT)
-        expand = cv2.pyrUp(dsample_img, dstsize=img.shape[::-1])
+        dsample_img = cv2.pyrDown(img, borderType = cv2.BORDER_REFLECT)
+        expand = cv2.pyrUp(dsample_img, dstsize = img.shape[::-1])
 
         residual_lap = img - expand
 
@@ -65,7 +65,7 @@ def reconstruct_laplacian_pyramid(pyramid: list[np.ndarray]) -> np.ndarray:
     small_g_img = pyramid_rev[0]
 
     for level in pyramid_rev[1:]:
-        expand = cv2.pyrUp(small_g_img, dstsize=level.shape[::-1])
+        expand = cv2.pyrUp(small_g_img, dstsize = level.shape[::-1])
         small_g_img = expand + level
         
     return small_g_img 
