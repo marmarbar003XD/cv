@@ -71,10 +71,7 @@ def reconstruct_laplacian_pyramid(pyramid: list[np.ndarray]) -> np.ndarray:
     return small_g_img 
 
 
-
-def threshold_laplacian_pyramid(
-    pyramid: list[np.ndarray], threshold: float
-) -> list[np.ndarray]:
+def threshold_laplacian_pyramid( pyramid: list[np.ndarray], threshold: float) -> list[np.ndarray]:
     """Return an independent thresholded copy of a Laplacian pyramid.
 
     For every residual level (all entries except the final coarse image), set
@@ -87,18 +84,36 @@ def threshold_laplacian_pyramid(
     A suitable independent copy for this list-of-arrays structure is:
         new_pyramid = [level.copy() for level in pyramid]
     """
-    # TODO
-    raise NotImplementedError
+    new_pyramid = [level.copy() for level in pyramid]
+    for lvl in new_pyramid[:-1]:
+        for r_idx, row in enumerate(lvl):
+            for c_idx, col in enumerate(row):
+                if np.abs(lvl[r_idx, c_idx]) < threshold:
+                    lvl[r_idx, c_idx] = 0
 
+    return new_pyramid
 
+    
 def residual_nonzero_fraction(pyramid: list[np.ndarray]) -> float:
     """Return the fraction of nonzero coefficients in the residual levels.
-
     Count coefficients only in pyramid[:-1]; the final coarse image is not
-    included. Return a Python float in [0, 1].
-    """
-    # TODO
-    raise NotImplementedError
+    included. Return a Python float in [0, 1]. """
+    
+    non_zero = 0
+    total_elem = 0
+    for lvl in pyramid[:-1]:
+        for r in lvl:
+            for val in r:
+                total_elem += 1
+                if val != 0:
+                    non_zero += 1
+
+    if total_elem == 0:
+        return 0
+    
+        
+    total_perc = non_zero/(len(pyramid) - 1)
+    return total_perc 
 
 
 # -----------------------------------------------------------------------------
@@ -172,6 +187,7 @@ def main() -> None:
     thresholds = [0.01, 0.03, 0.08]
     panels = [("Original", image), ("Exact", exact)]
 
+    
     for threshold in thresholds:
         compressed = threshold_laplacian_pyramid(pyramid, threshold)
         fraction = residual_nonzero_fraction(compressed)
