@@ -112,7 +112,7 @@ def residual_nonzero_fraction(pyramid: list[np.ndarray]) -> float:
         return 0
     
         
-    total_perc = non_zero/(len(pyramid) - 1)
+    total_perc = non_zero/total_elem
     return total_perc 
 
 
