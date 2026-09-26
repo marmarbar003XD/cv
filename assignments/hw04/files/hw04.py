@@ -89,7 +89,7 @@ def make_hybrid_image(image_low, image_high, sigma_low, sigma_high):
     low_pass_mask = gaussian_frequency_mask(image_low.shape, sigma_low)
     low = apply_frequency_filter(image_low, low_pass_mask)
 
-    high_pass_mask = gaussian_frequency_mask(image_high.shape, sigma_high)
+    high_pass_mask = 1 - gaussian_frequency_mask(image_high.shape, sigma_high)
     high = apply_frequency_filter(image_high, high_pass_mask)
 
     hybrid = (low + high) / 2
