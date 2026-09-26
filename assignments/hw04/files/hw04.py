@@ -46,7 +46,8 @@ def gaussian_frequency_mask(shape, sigma):
 def apply_frequency_filter(image, mask):
     """Filter using cv2.dft/cv2.idft; return a same-shape float32 array.
 
-    image: 2-D float32 array. mask: centered 2-D float32 frequency weights.
+    image: 2-D float32 array. 
+    mask: centered 2-D float32 frequency weights.
     Graded masks preserve conjugate symmetry. Use periodic boundaries,
     without padding. Preserve signs and phase. Do not clip, normalize,
     take an absolute value, or modify either input.
@@ -56,6 +57,16 @@ def apply_frequency_filter(image, mask):
     # 3. Undo the exact shifts: (-(M//2), -(N//2)).
     # 4. cv2.idft(..., flags=cv2.DFT_SCALE | cv2.DFT_REAL_OUTPUT).
     # TODO: return the filtered float32 image without clipping.
+
+    F = cv2.dft(image, flags = cv2.DFT_COMPLEX_OUTPUT)
+    M = image.shape[0]
+    N = image.shape[1]
+    shift = np.roll(F, (M // 2, N // 2), axis = (0,1))
+    f_filter = shift * mask[..., None]
+    unshift = np.roll(f_filter, (-(M // 2), -(N // 2)), axis = (0,1))
+    inv_f = cv2.idft(unshift, flags = cv2.DFT_SCALE | cv2.DFT_REAL_OUTPUT)
+    return inv_f
+
     
 
 
