@@ -67,8 +67,6 @@ def apply_frequency_filter(image, mask):
     inv_f = cv2.idft(unshift, flags = cv2.DFT_SCALE | cv2.DFT_REAL_OUTPUT)
     return inv_f
 
-    
-
 
 def make_hybrid_image(image_low, image_high, sigma_low, sigma_high):
     """Return (low, high, hybrid), each a same-shape float32 array.
@@ -86,6 +84,7 @@ def make_hybrid_image(image_low, image_high, sigma_low, sigma_high):
     # 4. Pass image_high and (1 - second_mask) to YOUR filter function.
     # 5. Average the two resulting images and return (low, high, hybrid).
     # TODO: connect the provided helper and your filter function.
+    
     low_pass_mask = gaussian_frequency_mask(image_low.shape, sigma_low)
     low = apply_frequency_filter(image_low, low_pass_mask)
 
@@ -96,12 +95,6 @@ def make_hybrid_image(image_low, image_high, sigma_low, sigma_high):
 
     return (low, high, hybrid)
         
-
-
-
-
-
-
 
 # Everything below is provided. Keep its output contract unchanged.
 def load_grayscale(path):
