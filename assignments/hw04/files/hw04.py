@@ -21,7 +21,12 @@ def log_magnitude_spectrum(image):
     # 2. Center axes (0, 1) with np.roll; shifts are (M//2, N//2).
     # 3. cv2.magnitude(F[..., 0], F[..., 1]), then np.log1p.
     # TODO: return the centered log-magnitude image.
-    raise NotImplementedError("Complete log_magnitude_spectrum")
+    F = cv2.dft(image, flags = cv2.DFT_COMPLEX_OUTPUT)
+    M = image.shape[0]
+    N = image.shape[1]
+    shift = np.roll(F, (M // 2, N // 2), axis = (0,1))
+    mag = cv2.magnitude(shift[..., 0], shift[..., 1])
+    return np.log1p(mag)
 
 
 def gaussian_frequency_mask(shape, sigma):
@@ -51,7 +56,7 @@ def apply_frequency_filter(image, mask):
     # 3. Undo the exact shifts: (-(M//2), -(N//2)).
     # 4. cv2.idft(..., flags=cv2.DFT_SCALE | cv2.DFT_REAL_OUTPUT).
     # TODO: return the filtered float32 image without clipping.
-    raise NotImplementedError("Complete apply_frequency_filter")
+    
 
 
 def make_hybrid_image(image_low, image_high, sigma_low, sigma_high):
@@ -70,7 +75,7 @@ def make_hybrid_image(image_low, image_high, sigma_low, sigma_high):
     # 4. Pass image_high and (1 - second_mask) to YOUR filter function.
     # 5. Average the two resulting images and return (low, high, hybrid).
     # TODO: connect the provided helper and your filter function.
-    raise NotImplementedError("Complete make_hybrid_image")
+    #raise NotImplementedError("Complete make_hybrid_image")
 
 
 # Everything below is provided. Keep its output contract unchanged.
