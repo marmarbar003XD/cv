@@ -86,7 +86,21 @@ def make_hybrid_image(image_low, image_high, sigma_low, sigma_high):
     # 4. Pass image_high and (1 - second_mask) to YOUR filter function.
     # 5. Average the two resulting images and return (low, high, hybrid).
     # TODO: connect the provided helper and your filter function.
-    #raise NotImplementedError("Complete make_hybrid_image")
+    low_pass_mask = gaussian_frequency_mask(image_low.shape, sigma_low)
+    low = apply_frequency_filter(image_low, low_pass_mask)
+
+    high_pass_mask = gaussian_frequency_mask(image_high.shape, sigma_high)
+    high = apply_frequency_filter(image_high, high_pass_mask)
+
+    hybrid = (low + high) / 2
+
+    return (low, high, hybrid)
+        
+
+
+
+
+
 
 
 # Everything below is provided. Keep its output contract unchanged.
