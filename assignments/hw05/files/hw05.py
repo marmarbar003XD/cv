@@ -58,11 +58,6 @@ def compute_gradients(image, sigma):
     return (Ix, Iy, magnitude, angle)
 
 
-
-
-
-
-
 def nonmaximum_suppression(magnitude, angle):
     """Return same-size float32 magnitudes after thinning.
 
@@ -71,7 +66,16 @@ def nonmaximum_suppression(magnitude, angle):
     Do not modify either input.
     """
     # TODO: follow Part 2 in the assignment.
-    raise NotImplementedError("Complete nonmaximum_suppression")
+
+    forward, backward = sample_along_gradient(magnitude, angle)
+    condition = (magnitude > forward) & (magnitude >= backward)
+    result = np.where(condition, magnitude, 0)
+
+    # row and col = 0
+    result[[0, 1], :] =  0
+    result[:, [0, 1]] =  0
+
+    return result
 
 
 def hysteresis_threshold(response, low, high):
