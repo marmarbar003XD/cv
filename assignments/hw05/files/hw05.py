@@ -102,17 +102,18 @@ def hysteresis_threshold(response, low, high):
         edge_map[lbl] = True
 
     bool_img = np.array(edge_map)[labels]
-    
+
     return bool_img
-
-
 
 
 
 def detect_edges(image, sigma, low, high):
     """Call your three functions in order and return the final bool edge map."""
     # TODO: follow Part 4 in the assignment.
-    raise NotImplementedError("Complete detect_edges")
+    Ix, Iy, magnitude, angle = compute_gradients(image, sigma)
+    response = nonmaximum_suppression(magnitude, angle)
+    edges = hysteresis_threshold(response, low, high)
+    return edges
 
 
 # Everything below is PROVIDED. Leave it unchanged.
