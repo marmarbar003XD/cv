@@ -109,7 +109,7 @@ def hysteresis_threshold(response, low, high):
 
 def detect_edges(image, sigma, low, high):
     """Call your three functions in order and return the final bool edge map."""
-    # TODO: follow Part 4 in the assignment.
+    # TODO: follow Part 4 sin the assignment.
     Ix, Iy, magnitude, angle = compute_gradients(image, sigma)
     response = nonmaximum_suppression(magnitude, angle)
     edges = hysteresis_threshold(response, low, high)
