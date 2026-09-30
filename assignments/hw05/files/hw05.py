@@ -49,7 +49,18 @@ def compute_gradients(image, sigma):
     Keep signed derivatives; angle is np.arctan2(Iy, Ix), in radians.
     """
     # TODO: follow Part 1 in the assignment.
-    raise NotImplementedError("Complete compute_gradients")
+    hx, hy = gaussian_derivative_kernels(sigma)
+    Ix = cv2.filter2D(image, -1, hx, borderType = cv2.BORDER_REFLECT_101)
+    Iy = cv2.filter2D(image, -1, hy, borderType = cv2.BORDER_REFLECT_101)
+    magnitude = np.sqrt(Ix**2 + Iy**2)
+    angle = np.arctan2(Iy, Ix)
+
+    return (Ix, Iy, magnitude, angle)
+
+
+
+
+
 
 
 def nonmaximum_suppression(magnitude, angle):
