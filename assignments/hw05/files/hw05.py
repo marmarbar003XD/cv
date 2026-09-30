@@ -86,7 +86,27 @@ def hysteresis_threshold(response, low, high):
     Valid thresholds satisfy 0 <= low <= high. Do not change response.
     """
     # TODO: follow Part 3 in the assignment.
-    raise NotImplementedError("Complete hysteresis_threshold")
+
+    # conditions of pixel (weak is the remaining)
+    candidates_pix = (response >= low) & (response > 0)
+    strong_pix = response >= high
+
+    number_of_labels, labels = cv2.connectedComponents(candidates_pix.astype(np.uint8), 
+                                                       connectivity = 8)
+
+    strong = np.unique(labels[strong_pix])
+
+    edge_map = [False] * number_of_labels
+
+    for lbl in strong:
+        edge_map[lbl] = True
+
+    bool_img = np.array(edge_map)[labels]
+    
+    return bool_img
+
+
+
 
 
 def detect_edges(image, sigma, low, high):
