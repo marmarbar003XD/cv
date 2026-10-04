@@ -71,10 +71,6 @@ def nonmaximum_suppression(magnitude, angle):
     condition = (magnitude > forward) & (magnitude >= backward)
     result = np.where(condition, magnitude, 0)
 
-    # row and col = 0
-    result[[0, 1], :] =  0
-    result[:, [0, 1]] =  0
-
     return result
 
 
@@ -96,6 +92,7 @@ def hysteresis_threshold(response, low, high):
 
     strong = np.unique(labels[strong_pix])
 
+    # boolean arr
     edge_map = [False] * number_of_labels
 
     for lbl in strong:
