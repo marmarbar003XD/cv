@@ -69,7 +69,7 @@ def nonmaximum_suppression(magnitude, angle):
 
     forward, backward = sample_along_gradient(magnitude, angle)
     condition = (magnitude > forward) & (magnitude >= backward)
-    result = np.where(condition, magnitude, 0)
+    result = np.where(condition, magnitude, 0).astype(np.float32)
 
     # border zero
     result[0, : ] = 0
@@ -91,7 +91,7 @@ def hysteresis_threshold(response, low, high):
 
     # conditions of pixel (weak is the remaining)
     candidates_pix = (response >= low) & (response > 0)
-    strong_pix = response >= high
+    strong_pix = candidates_pix & (response >= high)
 
     number_of_labels, labels = cv2.connectedComponents(candidates_pix.astype(np.uint8), 
                                                        connectivity = 8)
