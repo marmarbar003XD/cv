@@ -62,7 +62,10 @@ def extract_sift(image, nfeatures=800):
     sift = cv2.SIFT_create(nfeatures = nfeatures)
     keypoints, descriptors = sift.detectAndCompute(image, None)
 
-    return (keypoints, descriptors)
+    if descriptors is None:
+        return [], np.empty((0, 128), dtype=np.float32)
+    else:
+        return (keypoints, descriptors)
 
 
 # Everything below is PROVIDED. Leave it unchanged.
