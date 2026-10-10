@@ -27,8 +27,7 @@ def harris_response(image, sigma_d, sigma_w, alpha):
     Keep signed responses. All parameters are valid; both sigmas > 0.
     """
 
-    img = image.copy()
-    smoothed = cv2.GaussianBlur(img, (0, 0), sigma_d)
+    smoothed = cv2.GaussianBlur(image, (0, 0), sigma_d)
 
     hx, hy = derivative_filters()
 
@@ -59,8 +58,11 @@ def extract_sift(image, nfeatures=800):
     If no features: return [], np.empty((0, 128), dtype=np.float32).
     Do not change image; nfeatures is a positive integer.
     """
-    # TODO: follow the corresponding assignment section.
-    raise NotImplementedError("Complete extract_sift")
+
+    sift = cv2.SIFT_create(nfeatures = nfeatures)
+    keypoints, descriptors = sift.detectAndCompute(image, None)
+
+    return (keypoints, descriptors)
 
 
 # Everything below is PROVIDED. Leave it unchanged.
