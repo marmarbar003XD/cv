@@ -42,11 +42,6 @@ def ratio_match(descriptors1, descriptors2, ratio):
     return good_match
     
 
-    
-
-
-
-
 
 def mutual_matches(matches12, matches21):
     """Keep forward matches that also passed the reverse ratio test.
