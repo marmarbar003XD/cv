@@ -22,8 +22,30 @@ def ratio_match(descriptors1, descriptors2, ratio):
     N=0 or M<2: return []. Reject two zero-distance neighbors as ambiguous.
     Return matches in increasing queryIdx order; do not modify inputs.
     """
-    # TODO: follow the corresponding assignment section.
-    raise NotImplementedError("Complete ratio_match")
+    
+    if len(descriptors1) == 0 or len(descriptors2) < 2:
+        return []
+
+    bf_match = cv2.BFMatcher(cv2.NORM_L2, crossCheck=False).knnMatch(descriptors1, descriptors2, k = 2)
+
+    good_match = []
+    for g in bf_match:
+        if len(g) < 2:
+            continue
+
+        best, second = g
+
+        if best.distance < ratio * second.distance and 0 < ratio < 1:
+            good_match.append(best)
+
+    
+    return good_match
+    
+
+    
+
+
+
 
 
 def mutual_matches(matches12, matches21):
