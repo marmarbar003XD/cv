@@ -85,8 +85,19 @@ def match_images(image1, image2, ratio):
     Return the original keypoint lists, forward matches, and mutual subset.
     Do not change images. Empty feature sets are valid.
     """
-    # TODO: follow the corresponding assignment section.
-    raise NotImplementedError("Complete match_images")
+
+    keypoints1, descriptors1 = extract_sift(image1)
+    keypoints2, descriptors2 = extract_sift(image2)
+
+    forward_matches = ratio_match(descriptors1, descriptors2, ratio)
+    rev_list = ratio_match(descriptors2, descriptors1, ratio)
+
+    mutual_matches = mutual_matches(forward_matches, rev_list )
+
+
+    return (keypoints1, keypoints2, forward_matches, mutual_matches)
+
+
 
 
 
