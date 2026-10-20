@@ -29,7 +29,7 @@ def ratio_match(descriptors1, descriptors2, ratio):
     
     bf_match = cv2.BFMatcher(cv2.NORM_L2, crossCheck=False).knnMatch(descriptors1, descriptors2, k = 2)
 
-    good_match = []
+    potential_match = []
 
 
     if 0 < ratio < 1:
@@ -40,10 +40,23 @@ def ratio_match(descriptors1, descriptors2, ratio):
             best, second = g
 
             if best.distance < ratio * second.distance:
-                good_match.append(best)
+                potential_match.append(best)
     else:
         return []
 
+
+    # expand potential_match
+    pairs = []
+    for m in potential_match:
+        pairs.append((m.queryIdx, m))
+
+    # sort via queryIdx
+    pairs.sort()
+
+    # Add sorted list to new list
+    good_match = []
+    for _, m in pairs:
+        good_match.append(m)
     
     return good_match
     
