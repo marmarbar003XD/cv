@@ -111,10 +111,10 @@ def match_images(image1, image2, ratio):
     forward_matches = ratio_match(descriptors1, descriptors2, ratio)
     rev_list = ratio_match(descriptors2, descriptors1, ratio)
 
-    mutual_matches = mutual_matches(forward_matches, rev_list )
+    mm = mutual_matches(forward_matches, rev_list)
 
 
-    return (keypoints1, keypoints2, forward_matches, mutual_matches)
+    return (keypoints1, keypoints2, forward_matches, mm)
 
 
 
