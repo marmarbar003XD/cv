@@ -25,7 +25,7 @@ def ratio_match(descriptors1, descriptors2, ratio):
     
     if len(descriptors1) == 0 or len(descriptors2) < 2:
         return []
-
+    
     bf_match = cv2.BFMatcher(cv2.NORM_L2, crossCheck=False).knnMatch(descriptors1, descriptors2, k = 2)
 
     good_match = []
@@ -51,8 +51,29 @@ def mutual_matches(matches12, matches21):
     distances. Return a new list of the retained forward objects.
     Empty lists are valid. Do not modify either input or its match objects.
     """
-    # TODO: follow the corresponding assignment section.
-    raise NotImplementedError("Complete mutual_matches")
+
+    # ensure they are not empty
+    if not matches12 or not matches21:
+        return []
+
+    # reverse pair
+    reverse_pair = set()
+    for m in matches21:
+        j = m.queryIdx
+        i = m.trainIdx
+        reverse_pair.add((j, i))
+
+    pair_match = []
+
+    # reverse vs forward
+    for m in matches12:
+        i = m.queryIdx
+        j = m.trainIdx
+
+        if (i,j) in reverse_pair:
+            pair_match.append(m)
+
+    return pair_match
 
 
 def match_images(image1, image2, ratio):
