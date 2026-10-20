@@ -99,8 +99,6 @@ def match_images(image1, image2, ratio):
 
 
 
-
-
 # Everything below is PROVIDED. Leave it unchanged.
 def extract_sift(image, nfeatures=800):
     """Return (keypoints, descriptors) from OpenCV SIFT, preserving order.
