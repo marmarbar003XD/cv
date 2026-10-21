@@ -59,6 +59,7 @@ def ratio_match(descriptors1, descriptors2, ratio):
         good_match.append(m)
     
     return good_match
+
     
 
 
@@ -80,7 +81,7 @@ def mutual_matches(matches12, matches21):
     for m in matches21:
         j = m.queryIdx
         i = m.trainIdx
-        reverse_pair.add((j, i))
+        reverse_pair.add((i, j))
 
     pair_match = []
 
