@@ -27,4 +27,7 @@ def detect_document(image):
     Return np.empty((0, 2)) if no document can be detected.
     Additional helper functions are allowed in this file.
     """
-    raise NotImplementedError("Complete detect_document.")
+
+    if image is None:
+        return np.empty((0, 2))
+    
