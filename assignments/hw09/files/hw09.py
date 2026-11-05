@@ -53,10 +53,8 @@ def track_animal(frames):
         contour, _ = cv2.findContours(mask_c, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     
         # get largest blob
-    
         large_c = None
         large_a = 100
-    
     
         for c in contour:
             if cv2.contourArea(c) > large_a:
