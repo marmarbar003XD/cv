@@ -35,8 +35,16 @@ def board_points(pattern_size, square_size):
     Start at (0, 0, 0) and go row by row: X increases fastest, then Y.
     Neighboring corners are square_size apart.
     """
-    # TODO
-    raise NotImplementedError("Complete board_points")
+    points = []
+    for row in range(pattern_size[1]):
+        for col in range(pattern_size[0]):
+            points.append([col * square_size, row * square_size, 0])
+    return np.array(points, dtype = np.float32)
+            
+
+
+
+    
 
 
 def detect_board(image, pattern_size):
