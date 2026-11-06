@@ -71,5 +71,33 @@ def calibrate_camera(images, pattern_size, square_size):
     Return the five outputs of cv2.calibrateCamera, unchanged:
         rms, K, dist, rvecs, tvecs
     """
-    # TODO: use board_points, detect_board, and cv2.calibrateCamera.
-    raise NotImplementedError("Complete calibrate_camera")
+    image_size = (images[0].shape[1], images[0].shape[0])
+
+    brd_point = board_points(pattern_size, square_size)
+    obj_points = []
+    img_points = []
+
+    for image in images:
+        corn_state = detect_board(image, pattern_size)
+        if corn_state is None:
+            continue
+        obj_points.append(brd_point)
+        img_points.append(corn_state)
+
+    rms, K, dist, rvecs, tvecs = cv2.calibrateCamera(obj_points, img_points, image_size,  None, None)
+
+    return rms, K, dist, rvecs, tvecs
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
