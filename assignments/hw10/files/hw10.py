@@ -9,7 +9,7 @@ import cv2
 import numpy as np
 
 # TODO: side length of one square of YOUR printed or displayed checkerboard, in mm.
-SQUARE_SIZE_MM = None
+SQUARE_SIZE_MM = 23
 
 
 def project_points(X_w, K, R_c_w, t_c_w):
@@ -23,6 +23,8 @@ def project_points(X_w, K, R_c_w, t_c_w):
     Use NumPy. Do not call cv2.projectPoints in this function.
     """
     # TODO: world frame -> camera frame -> pixels (divide by the depth Z_c).
+
+
     raise NotImplementedError("Complete project_points")
 
 
@@ -45,8 +47,18 @@ def detect_board(image, pattern_size):
     Return the refined corners as OpenCV returns them: float32, one (x, y)
     per corner, columns*rows corners in OpenCV's order.
     """
-    # TODO
-    raise NotImplementedError("Complete detect_board")
+
+    image_g = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    state, corners = cv2.findChessboardCorners(image_g, pattern_size)
+
+    if not state:
+        return None
+    
+    ref_corner = cv2.cornerSubPix(image_g, corners, (11, 11), (-1, -1))
+
+    return ref_corner
+
+
 
 
 def calibrate_camera(images, pattern_size, square_size):
