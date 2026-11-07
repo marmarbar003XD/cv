@@ -24,6 +24,43 @@ def project_points(X_w, K, R_c_w, t_c_w):
     """
     # TODO: world frame -> camera frame -> pixels (divide by the depth Z_c).
 
+    # cam mat
+    x_c = R_c_w @ X_w.T + t_c_w
+
+    # cam corrds
+    cam_x = x_c[0, :]
+    cam_y = x_c[1, :]
+    cam_z = x_c[2, :]
+
+    # normalize
+
+    u_norm = cam_x/ cam_z
+    v_norm = cam_y/ cam_z
+
+    # intrinsic vals
+    fx = K[0, 0]
+    fy = K[1, 1]
+    cx = K[0, 2]
+    cy = K[1, 2]
+
+    # pixel coords
+    u = fx * u_norm + cx
+    v = fy * v_norm + cy
+
+    pix_coords = np.vstack((u, v))
+
+    return pix_coords.T
+
+
+
+
+
+
+
+    
+
+
+    
 
     raise NotImplementedError("Complete project_points")
 
@@ -42,11 +79,6 @@ def board_points(pattern_size, square_size):
     return np.array(points, dtype = np.float32)
             
 
-
-
-    
-
-
 def detect_board(image, pattern_size):
     """Return the refined corners from cv2.cornerSubPix, or None if not found.
 
@@ -61,8 +93,9 @@ def detect_board(image, pattern_size):
 
     if not state:
         return None
-    
-    ref_corner = cv2.cornerSubPix(image_g, corners, (11, 11), (-1, -1))
+
+    criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_COUNT, 40, 0.01 )
+    ref_corner = cv2.cornerSubPix(image_g, corners, (11, 11), (-1, -1), criteria)
 
     return ref_corner
 
@@ -96,16 +129,3 @@ def calibrate_camera(images, pattern_size, square_size):
 
     return rms, K, dist, rvecs, tvecs
     
-
-
-
-
-
-
-
-
-
-
-
-
-
