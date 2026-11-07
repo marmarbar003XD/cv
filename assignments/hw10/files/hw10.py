@@ -81,7 +81,7 @@ def detect_board(image, pattern_size):
     if not state:
         return None
 
-    criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_COUNT, 40, 0.01 )
+    criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_COUNT, 40, 0.01)
     ref_corner = cv2.cornerSubPix(image_g, corners, (11, 11), (-1, -1), criteria)
 
     return ref_corner
