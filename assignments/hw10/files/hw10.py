@@ -27,13 +27,12 @@ def project_points(X_w, K, R_c_w, t_c_w):
     # cam mat
     x_c = R_c_w @ X_w.T + t_c_w
 
-    # cam corrds
+    # cam coords
     cam_x = x_c[0, :]
     cam_y = x_c[1, :]
     cam_z = x_c[2, :]
 
     # normalize
-
     u_norm = cam_x/ cam_z
     v_norm = cam_y/ cam_z
 
@@ -51,18 +50,6 @@ def project_points(X_w, K, R_c_w, t_c_w):
 
     return pix_coords.T
 
-
-
-
-
-
-
-    
-
-
-    
-
-    raise NotImplementedError("Complete project_points")
 
 
 def board_points(pattern_size, square_size):
