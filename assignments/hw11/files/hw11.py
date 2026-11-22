@@ -21,7 +21,61 @@ def reconstruct_sparse(image1, image2, K, dist):
     """
     # TODO: match features, undistort the matches, cv2.findEssentialMat (RANSAC),
     #       cv2.recoverPose, cv2.triangulatePoints.
-    raise NotImplementedError("Complete reconstruct_sparse")
+
+    # image to grey
+    img1_g = cv2.cvtColor(image1, cv2.COLOR_BGR2GRAY)
+    img2_g = cv2.cvtColor(image2, cv2.COLOR_BGR2GRAY)
+
+    # sift 
+    sift = cv2.SIFT_create()
+
+    keyp_1, descrip1 = sift.detectAndCompute(img1_g, None)
+    keyp_2, descrip2 = sift.detectAndCompute(img2_g, None)
+
+    # Bf
+    bf = cv2.BFMatcher(cv2.NORM_L2)
+    matches = bf.knnMatch(descrip1, descrip2, k = 2)
+
+    # lowe ratio
+    best_matches = []
+    for m, n in matches:
+        if m.distance < 0.8 * n.distance:
+            best_matches.append(m)
+
+
+    coord1 = []
+    coord2 = []
+
+    for m in best_matches:
+
+        pt1 = coord1.append(keyp_1[m.queryIdx].pt)
+        pt2 = coord2.append(keyp_2[m.trainIdx].pt)
+
+        coord1.append(pt1)
+        coord2.append(pt2)
+
+
+    pts1 = np.array(coord1)
+    pts2 = np.array(coord2)
+
+    # remove lens dist
+    pts1_c = cv2.undistortPoints(pts1, K, dist)
+    pts2_c = cv2.undistortPoints(pts2, K, dist)
+
+    # Essential matrix
+    E, mask_ess = cv2.findEssentialMat(pts1_c, pts2_c, K, cv2.Ransac)
+
+    # relative pose
+    _, R, t, mask = cv2.recoverPose(E, pts1_c, pts2_c, K, mask_ess)
+
+    # triangulate
+    P1 = K @np.hstack([np.eye(3), np.zeros((3, 1))])
+    P2 = K @ np.hstack([R, t])
+
+    X4 = cv2.triangulatePoints(P1, P2, pts1_c.T, pts2_c.T)
+    X = (X4[:3]/ X4[3]).T
+
+    return pts1, pts2, R, t, X
 
 
 def rectify_pair(image1, image2, K, dist, R, t):
