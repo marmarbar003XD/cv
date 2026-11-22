@@ -47,13 +47,8 @@ def reconstruct_sparse(image1, image2, K, dist):
     coord2 = []
 
     for m in best_matches:
-
-        pt1 = coord1.append(keyp_1[m.queryIdx].pt)
-        pt2 = coord2.append(keyp_2[m.trainIdx].pt)
-
-        coord1.append(pt1)
-        coord2.append(pt2)
-
+        coord1.append(keyp_1[m.queryIdx].pt)
+        coord2.append(keyp_2[m.trainIdx].pt)
 
     pts1 = np.array(coord1)
     pts2 = np.array(coord2)
@@ -63,7 +58,7 @@ def reconstruct_sparse(image1, image2, K, dist):
     pts2_c = cv2.undistortPoints(pts2, K, dist)
 
     # Essential matrix
-    E, mask_ess = cv2.findEssentialMat(pts1_c, pts2_c, K, cv2.Ransac)
+    E, mask_ess = cv2.findEssentialMat(pts1_c, pts2_c, K, cv2.RANSAC)
 
     # relative pose
     _, R, t, mask = cv2.recoverPose(E, pts1_c, pts2_c, K, mask_ess)
