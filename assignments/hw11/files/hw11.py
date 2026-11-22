@@ -100,9 +100,6 @@ def rectify_pair(image1, image2, K, dist, R, t):
     return rect1, rect2, R1, R2, P1, P2, Q
 
 
-    
-
-
 def reconstruct_dense(rect1, rect2, Q):
     """Disparity and dense 3D points from a rectified pair.
 
@@ -112,4 +109,14 @@ def reconstruct_dense(rect1, rect2, Q):
         points: (H, W, 3) 3D points in rectified camera 1's frame
     """
     # TODO: cv2.StereoBM or cv2.StereoSGBM, divide by 16, cv2.reprojectImageTo3D.
-    raise NotImplementedError("Complete reconstruct_dense")
+    
+    # stereo
+    sbm = cv2.StereoBM_create()
+    disparity = sbm.compute(rect1, rect2).astype(np.float32) / 16
+    valid = disparity > 0
+    
+    # 3d point
+    points = cv2.reprojectImageTo3D(disparity, Q)
+
+    return disparity, valid, points
+
