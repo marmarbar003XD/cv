@@ -86,7 +86,21 @@ def rectify_pair(image1, image2, K, dist, R, t):
         R1, R2, P1, P2, Q: the outputs of cv2.stereoRectify
     """
     # TODO: cv2.stereoRectify, cv2.initUndistortRectifyMap, cv2.remap.
-    raise NotImplementedError("Complete rectify_pair")
+
+    w, h = image1.shape[1], image1.shape[0]
+    R1, R2, P1, P2, Q, _, _ = cv2.stereoRectify(K, dist, K, dist, (w, h), R, t)
+
+    # wrap 
+    map1 = cv2.initUndistortRectifyMap(K, dist, R1, P1, (w,h))
+    rect1 = cv2.remap(image1, map1, cv2.INTER_LINEAR)
+
+    map2 = cv2.initUndistortRectifyMap(K, dist, R2, P2, (w,h))
+    rect2 = cv2.remap(image2, map2, cv2.INTER_LINEAR)
+
+    return rect1, rect2, R1, R2, P1, P2, Q
+
+
+    
 
 
 def reconstruct_dense(rect1, rect2, Q):
